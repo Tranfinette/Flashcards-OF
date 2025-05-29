@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Story Cards - English/French</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            margin: 10px 0;
+            opacity: 0.9;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .card {
+            perspective: 1000px;
+            height: 250px;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            padding: 25px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .card-front {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            color: #333;
+        }
+
+        .card-back {
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .card-number {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: rgba(102, 126, 234, 0.8);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .card-back .card-number {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .card-content {
+            line-height: 1.6;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .card-front .card-content {
+            color: #2c3e50;
+        }
+
+        .card-back .card-content {
+            color: #ecf0f1;
+        }
+
+        .flip-hint {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9rem;
+            opacity: 0.7;
+            font-style: italic;
+        }
+
+        .card-front .flip-hint {
+            color: #7f8c8d;
+        }
+
+        .card-back .flip-hint {
+            color: #bdc3c7;
+        }
+
+        .reset-button {
+            margin-top: 30px;
+            padding: 12px 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .reset-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 768px) {
+            .cards-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .card {
+                height: 220px;
+            }
+            
+            .card-content {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Interactive Story Cards</h1>
+        <p>Click any card to flip between English and French</p>
+    </div>
+
+    <div class="cards-container" id="cardsContainer">
+        <!-- Cards will be generated by JavaScript -->
+    </div>
+
+    <button class="reset-button" onclick="resetAllCards()">Reset All Cards</button>
+
+    <script>
+        const storyData = [
+            {
+                english: "Monday morning. Claire walks into a large building in Gatineau. She feels a bit nervous: it's her first day at work.",
+                french: "Lundi matin. Claire entre dans un grand immeuble à Gatineau. Elle est un peu stressée : c'est son premier jour au travail."
+            },
+            {
+                english: "\"Hello, my name is Claire,\" she says at the front desk.\n\"Hello Claire. Are you the new project officer?\"\n\"Yes, that's right. I work at the Ministry of the Environment.\"",
+                french: "--- Bonjour, je m'appelle Claire, dit-elle à l'accueil.\n--- Bonjour Claire. Vous êtes la nouvelle agente de projet ?\n--- Oui, c'est ça. Je travaille au ministère de l'Environnement."
+            },
+            {
+                english: "A man approaches.\n\"Hi! I'm Marc, your colleague. Welcome!\"\n\"Thanks! Have you been working here for a long time?\"\n\"Yes, I've worked here for three years. Come, let me introduce you to our team.\"",
+                french: "Un homme s'approche.\n--- Bonjour ! Je suis Marc, votre collègue. Bienvenue !\n--- Merci ! Vous travaillez ici depuis longtemps ?\n--- Oui, je travaille ici depuis trois ans. Viens, je te présente notre équipe."
+            },
+            {
+                english: "They go up to the 5th floor. In a large office, Marc begins the introductions:\n\"This is Marie, our manager. She's very kind.\"\n\"Hello Claire! Do you speak French?\"\n\"Yes, a little. I'm an anglophone, but I'm learning French.\"",
+                french: "Ils montent au 5e étage. Marc commence les présentations :\n--- Voici Marie, notre gestionnaire. Elle est très gentille.\n--- Bonjour Claire ! Tu parles français ?\n--- Oui, un peu. Je suis anglophone, mais j'apprends le français."
+            },
+            {
+                english: "\"This is Ahmed. He's an analyst. He's from Morocco.\"\n\"Nice to meet you!\"\n\"And this is Sophie. She works in communications.\"",
+                french: "--- Lui, c'est Ahmed. Il est analyste. Il vient du Maroc.\n--- Enchantée !\n--- Elle, c'est Sophie. Elle travaille dans la communication."
+            },
+            {
+                english: "\"So Claire, do you live in Gatineau?\"\n\"Yes, I live on Laurier Street, just nearby.\"\n\"Great, we can have lunch together tomorrow!\"",
+                french: "--- Alors Claire, tu habites à Gatineau ?\n--- Oui, j'habite rue Laurier, juste à côté.\n--- Super, on pourra déjeuner ensemble demain !"
+            },
+            {
+                english: "Claire feels more at ease. She takes a deep breath: \"This is the beginning of a new adventure.\"",
+                french: "Claire se sent plus à l'aise. Elle respire un grand coup : \"C'est le début d'une nouvelle aventure.\""
+            }
+        ];
+
+        function createCard(data, index) {
+            return `
+                <div class="card" onclick="flipCard(this)">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="card-number">Card ${index + 1}</div>
+                            <div class="card-content">${data.english.replace(/\n/g, '<br>')}</div>
+                            <div class="flip-hint">Click to see French</div>
+                        </div>
+                        <div class="card-back">
+                            <div class="card-number">Carte ${index + 1}</div>
+                            <div class="card-content">${data.french.replace(/\n/g, '<br>')}</div>
+                            <div class="flip-hint">Cliquez pour voir l'anglais</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function flipCard(card) {
+            card.classList.toggle('flipped');
+        }
+
+        function resetAllCards() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.classList.remove('flipped');
+            });
+        }
+
+        // Initialize cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('cardsContainer');
+            container.innerHTML = storyData.map((data, index) => createCard(data, index)).join('');
+        });
+    </script>
+</body>
+</html>
