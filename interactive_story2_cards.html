@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive French Learning Cards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 50%, #2980b9 100%);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .title {
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1rem;
+            font-weight: 300;
+        }
+        
+        .progress-bar {
+            background: rgba(255,255,255,0.2);
+            height: 8px;
+            border-radius: 4px;
+            margin: 2rem auto;
+            max-width: 400px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #3498db 0%, #2ecc71 100%);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+        
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            perspective: 1000px;
+            height: 200px;
+            cursor: pointer;
+        }
+        
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .card-front {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+        }
+        
+        .card-back {
+            background: linear-gradient(135deg, #2d3436 0%, #636e72 100%);
+            color: white;
+            transform: rotateY(180deg);
+        }
+        
+        .card-number {
+            font-size: 0.9rem;
+            font-weight: 600;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-content {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            text-align: center;
+        }
+        
+        .language-label {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .flip-hint {
+            display: none;
+        }
+        
+        .stats {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: rgba(255,255,255,0.9);
+            padding: 1rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            min-width: 120px;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .stat-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .controls {
+            text-align: center;
+            margin-top: 3rem;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 0 0.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2rem;
+            }
+            
+            .cards-container {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .stats {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin: 2rem auto 0;
+                max-width: 300px;
+            }
+        }
+        
+        .card:hover .card-face {
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 class="title">🇫🇷 French Learning Cards</h1>
+        <p class="subtitle">Click any card to flip between English and French</p>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar"></div>
+        </div>
+    </div>
+    
+    <div class="stats">
+        <div class="stat-item">
+            <span>Cards Studied:</span>
+            <span id="studiedCount">0</span>
+        </div>
+        <div class="stat-item">
+            <span>Total Cards:</span>
+            <span>9</span>
+        </div>
+        <div class="stat-item">
+            <span>Progress:</span>
+            <span id="progressPercent">0%</span>
+        </div>
+    </div>
+    
+    <div class="cards-container" id="cardsContainer">
+        <!-- Cards will be dynamically generated -->
+    </div>
+    
+    <div class="controls">
+        <button class="btn" onclick="flipAllCards()">Flip All Cards</button>
+        <button class="btn" onclick="resetProgress()">Reset Progress</button>
+        <button class="btn" onclick="shuffleCards()">Shuffle Cards</button>
+    </div>
+
+    <script>
+        const cardData = [
+            {
+                english: "It's Tuesday morning. In a government meeting room, eight people are sitting around a big table. It's the first French class for new public servants.",
+                french: "C'est mardi matin. Dans une salle de réunion du gouvernement, huit personnes sont assises autour d'une grande table. C'est le premier cours de français pour les nouveaux fonctionnaires."
+            },
+            {
+                english: "The instructor walks into the room. Hello everyone! My name is Élodie. I'm your French teacher.",
+                french: "La formatrice entre dans la salle. Bonjour à tous ! Je m'appelle Élodie. Je suis votre prof de français."
+            },
+            {
+                english: "Everyone looks at each other, a bit shy. We'll start with a little exercise. Each of you will introduce yourselves.",
+                french: "Tout le monde se regarde, un peu timide. On va commencer avec un petit exercice. Chacun va se présenter."
+            },
+            {
+                english: "My name is Kevin. I'm originally from Toronto. I work at the Border Services Agency. Hello, I'm Mia. I work for the Ministry of the Environment. I live in Ottawa.",
+                french: "Je m'appelle Kevin. Je suis originaire de Toronto. Je travaille à l'Agence des services frontaliers. Bonjour, je suis Mia. Je travaille au ministère de l'Environnement. J'habite à Ottawa."
+            },
+            {
+                english: "Do you speak French? A little. But I understand well!",
+                french: "Vous parlez français ? Un peu. Mais je comprends bien !"
+            },
+            {
+                english: "I'm Ahmed. I'm from Morocco. I speak Arabic, French, and English. I work as an analyst at Immigration. Great! Ahmed, can you introduce your neighbor?",
+                french: "Je suis Ahmed. Je viens du Maroc. Je parle arabe, français et anglais. Je travaille comme analyste à l'Immigration. Parfait ! Ahmed, tu peux présenter ton voisin ?"
+            },
+            {
+                english: "Yes! This is Éric. He's a security advisor. He loves coffee and he's always on time! Now, you'll work in pairs. Ask your partner some questions.",
+                french: "Oui ! Voici Éric. Il est conseiller en sécurité. Il adore le café et il est toujours à l'heure ! Maintenant, vous allez travailler en binômes. Posez quelques questions à votre partenaire."
+            },
+            {
+                english: "For example: 'Where do you work?', 'What languages do you speak?', 'Where do you live?' The room becomes lively. Different accents can be heard, laughter, and hesitation.",
+                french: "Par exemple : « Où est-ce que tu travailles ? », « Quelles langues est-ce que tu parles ? », « Où est-ce que tu habites ? » La salle s'anime. On entend des accents différents, des rires, des hésitations."
+            },
+            {
+                english: "It's the beginning of a long journey… but everyone is motivated.",
+                french: "C'est le début d'un long parcours… mais tout le monde est motivé."
+            }
+        ];
+        
+        let studiedCards = new Set();
+        let currentCardOrder = [...Array(cardData.length).keys()];
+        
+        function createCard(index, data) {
+            return `
+                <div class="card fade-in" onclick="flipCard(${index})">
+                    <div class="card-inner">
+                        <div class="card-face card-front">
+                            <div class="language-label">🇬🇧 English</div>
+                            <div class="card-number">Card ${index + 1}</div>
+                            <div class="card-content">${data.english}</div>
+                        </div>
+                        <div class="card-face card-back">
+                            <div class="language-label">🇫🇷 Français</div>
+                            <div class="card-number">Carte ${index + 1}</div>
+                            <div class="card-content">${data.french}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function renderCards() {
+            const container = document.getElementById('cardsContainer');
+            container.innerHTML = currentCardOrder.map(index => 
+                createCard(index, cardData[index])
+            ).join('');
+        }
+        
+        function flipCard(index) {
+            const cards = document.querySelectorAll('.card');
+            const cardElement = cards[currentCardOrder.indexOf(index)];
+            cardElement.classList.toggle('flipped');
+            
+            studiedCards.add(index);
+            updateProgress();
+        }
+        
+        function updateProgress() {
+            const studiedCount = studiedCards.size;
+            const totalCards = cardData.length;
+            const percentage = Math.round((studiedCount / totalCards) * 100);
+            
+            document.getElementById('studiedCount').textContent = studiedCount;
+            document.getElementById('progressPercent').textContent = percentage + '%';
+            document.getElementById('progressBar').style.width = percentage + '%';
+        }
+        
+        function flipAllCards() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.toggle('flipped');
+                    studiedCards.add(currentCardOrder[index]);
+                }, index * 100);
+            });
+            setTimeout(updateProgress, cards.length * 100);
+        }
+        
+        function resetProgress() {
+            studiedCards.clear();
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.classList.remove('flipped');
+            });
+            updateProgress();
+        }
+        
+        function shuffleCards() {
+            currentCardOrder = currentCardOrder.sort(() => Math.random() - 0.5);
+            renderCards();
+        }
+        
+        // Initialize the app
+        renderCards();
+        updateProgress();
+    </script>
+</body>
+</html>
