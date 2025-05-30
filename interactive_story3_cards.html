@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>French Learning Cards - Story 3</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .title {
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1rem;
+            font-weight: 300;
+        }
+        
+        .progress-bar {
+            background: rgba(255,255,255,0.2);
+            height: 8px;
+            border-radius: 4px;
+            margin: 2rem auto;
+            max-width: 400px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #00d4ff 0%, #0099cc 100%);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+        
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            perspective: 1000px;
+            height: 200px;
+            cursor: pointer;
+        }
+        
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+        
+        .card-front {
+            background: #ffffff;
+            color: #000000;
+        }
+        
+        .card-back {
+            background: #000000;
+            color: #ffffff;
+            transform: rotateY(180deg);
+        }
+        
+        .card-number {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            opacity: 0.7;
+        }
+        
+        .card-content {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            text-align: center;
+            font-weight: 400;
+        }
+        
+        .language-label {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .card-front .language-label {
+            background: #000000;
+            color: #ffffff;
+        }
+        
+        .card-back .language-label {
+            background: #ffffff;
+            color: #000000;
+        }
+        
+        .stats {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 1rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            min-width: 120px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .stat-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .controls {
+            text-align: center;
+            margin-top: 3rem;
+        }
+        
+        .btn {
+            background: #000000;
+            color: white;
+            border: 2px solid #ffffff;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 0 0.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        
+        .btn:hover {
+            background: #ffffff;
+            color: #000000;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2rem;
+            }
+            
+            .cards-container {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .stats {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin: 2rem auto 0;
+                max-width: 300px;
+            }
+        }
+        
+        .card:hover .card-face {
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* High contrast enhancements */
+        .card-front {
+            border: 3px solid #000000;
+        }
+        
+        .card-back {
+            border: 3px solid #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 class="title">📚 French Story 3 - Office Morning</h1>
+        <p class="subtitle">Click any card to flip between English and French</p>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar"></div>
+        </div>
+    </div>
+    
+    <div class="stats">
+        <div class="stat-item">
+            <span>Cards Studied:</span>
+            <span id="studiedCount">0</span>
+        </div>
+        <div class="stat-item">
+            <span>Total Cards:</span>
+            <span>8</span>
+        </div>
+        <div class="stat-item">
+            <span>Progress:</span>
+            <span id="progressPercent">0%</span>
+        </div>
+    </div>
+    
+    <div class="cards-container" id="cardsContainer">
+        <!-- Cards will be dynamically generated -->
+    </div>
+    
+    <div class="controls">
+        <button class="btn" onclick="flipAllCards()">Flip All Cards</button>
+        <button class="btn" onclick="resetProgress()">Reset Progress</button>
+        <button class="btn" onclick="shuffleCards()">Shuffle Cards</button>
+    </div>
+
+    <script>
+        const cardData = [
+            {
+                english: "It's 8:50 AM. Éric arrives at the office. He turns on the lights and puts his bag down. He is the first to arrive.",
+                french: "Il est 8 h 50. Éric arrive au bureau. Il allume la lumière et pose son sac. Il est le premier arrivé."
+            },
+            {
+                english: "Éric goes to the kitchen and makes a coffee. He comes back with a big smile. He loves the quiet of the morning.",
+                french: "Éric va à la cuisine et se prépare un café. Il revient avec un grand sourire. Il aime le calme du matin."
+            },
+            {
+                english: "Ten minutes later, Mia and Kevin arrive together. They greet Éric and sit down.",
+                french: "Dix minutes plus tard, Mia et Kevin arrivent ensemble. Ils saluent Éric et s'installent."
+            },
+            {
+                english: "\"Did you sleep well?\" asks Kevin. \"Not really,\" replies Mia. \"My kids woke up at 5!\"",
+                french: "« Tu as bien dormi ? » demande Kevin. « Pas vraiment, » répond Mia. « Mes enfants se sont réveillés à 5 h ! »"
+            },
+            {
+                english: "Ahmed enters the room at 9:05. \"Sorry, I'm late. The bus didn't come!\"",
+                french: "Ahmed entre dans la salle à 9 h 05. « Désolé, je suis en retard. L'autobus n'est pas passé ! »"
+            },
+            {
+                english: "\"No problem,\" says Elodie. \"Let's start!\" She opens her laptop and connects to the projector.",
+                french: "« Pas de problème, » dit Élodie. « On commence ! » Elle ouvre son portable et se connecte au projecteur."
+            },
+            {
+                english: "\"Today, we'll learn how to ask and answer simple questions.\"",
+                french: "« Aujourd'hui, on va apprendre à poser et à répondre à des questions simples. »"
+            },
+            {
+                english: "The learners open their notebooks. The French class begins.",
+                french: "Les apprenants ouvrent leurs cahiers. Le cours de français commence."
+            }
+        ];
+        
+        let studiedCards = new Set();
+        let currentCardOrder = [...Array(cardData.length).keys()];
+        
+        function createCard(index, data) {
+            return `
+                <div class="card fade-in" onclick="flipCard(${index})">
+                    <div class="card-inner">
+                        <div class="card-face card-front">
+                            <div class="language-label">🇬🇧 English</div>
+                            <div class="card-number">Card ${index + 1}</div>
+                            <div class="card-content">${data.english}</div>
+                        </div>
+                        <div class="card-face card-back">
+                            <div class="language-label">🇫🇷 Français</div>
+                            <div class="card-number">Carte ${index + 1}</div>
+                            <div class="card-content">${data.french}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function renderCards() {
+            const container = document.getElementById('cardsContainer');
+            container.innerHTML = currentCardOrder.map(index => 
+                createCard(index, cardData[index])
+            ).join('');
+        }
+        
+        function flipCard(index) {
+            const cards = document.querySelectorAll('.card');
+            const cardElement = cards[currentCardOrder.indexOf(index)];
+            cardElement.classList.toggle('flipped');
+            
+            studiedCards.add(index);
+            updateProgress();
+        }
+        
+        function updateProgress() {
+            const studiedCount = studiedCards.size;
+            const totalCards = cardData.length;
+            const percentage = Math.round((studiedCount / totalCards) * 100);
+            
+            document.getElementById('studiedCount').textContent = studiedCount;
+            document.getElementById('progressPercent').textContent = percentage + '%';
+            document.getElementById('progressBar').style.width = percentage + '%';
+        }
+        
+        function flipAllCards() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.toggle('flipped');
+                    studiedCards.add(currentCardOrder[index]);
+                }, index * 100);
+            });
+            setTimeout(updateProgress, cards.length * 100);
+        }
+        
+        function resetProgress() {
+            studiedCards.clear();
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.classList.remove('flipped');
+            });
+            updateProgress();
+        }
+        
+        function shuffleCards() {
+            currentCardOrder = currentCardOrder.sort(() => Math.random() - 0.5);
+            renderCards();
+        }
+        
+        // Initialize the app
+        renderCards();
+        updateProgress();
+    </script>
+</body>
+</html>
