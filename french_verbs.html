@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>French Verb Flashcards</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-preserve-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+        .card-container {
+            transition: transform 0.7s;
+        }
+        .card-flipped {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+    <div class="w-full max-w-2xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">French Verb Flashcards</h1>
+            <p class="text-gray-600">Click the card to flip and see detailed information</p>
+            <div class="text-sm text-gray-500 mt-2" id="cardCounter">
+                Card 1 / 26
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="mb-6">
+            <div class="w-full bg-gray-200 rounded-full h-2">
+                <div id="progressBar" class="bg-blue-500 h-2 rounded-full transition-all duration-300" style="width: 3.8%"></div>
+            </div>
+        </div>
+
+        <!-- Flashcard -->
+        <div class="perspective-1000 mb-8">
+            <div id="flashcard" class="card-container relative w-full h-96 transform-style-preserve-3d cursor-pointer">
+                <!-- Front of Card -->
+                <div id="cardFront" class="absolute inset-0 backface-hidden bg-white rounded-xl shadow-lg border-2 border-blue-200 flex flex-col items-center justify-center p-8">
+                    <div class="text-center">
+                        <h2 id="frenchWord" class="text-4xl font-bold text-blue-600 mb-4">acheter</h2>
+                        <p id="englishWord" class="text-2xl text-gray-700 font-medium">to buy</p>
+                        <div class="mt-8 text-sm text-gray-500">
+                            Click to flip and see conjugations
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Back of Card -->
+                <div id="cardBack" class="absolute inset-0 backface-hidden rotate-y-180 bg-white rounded-xl shadow-lg border-2 border-green-200 p-6 overflow-y-auto">
+                    <div class="space-y-6">
+                        <!-- Conjugation -->
+                        <div>
+                            <h3 class="text-lg font-bold text-green-600 mb-3">Conjugation</h3>
+                            <div id="conjugationGrid" class="grid grid-cols-2 gap-2 text-sm">
+                                <!-- Conjugations will be populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Collocations -->
+                        <div>
+                            <h3 class="text-lg font-bold text-purple-600 mb-3">Common Collocations</h3>
+                            <div id="collocationsList" class="space-y-2">
+                                <!-- Collocations will be populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Example -->
+                        <div>
+                            <h3 class="text-lg font-bold text-orange-600 mb-3">Example</h3>
+                            <div id="exampleText" class="bg-orange-50 px-4 py-3 rounded text-sm">
+                                <!-- Example will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="flex justify-center items-center space-x-4">
+            <button id="prevBtn" class="flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+                Previous
+            </button>
+            
+            <button id="shuffleBtn" class="flex items-center px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors">
+                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+                Shuffle
+            </button>
+            
+            <button id="resetBtn" class="flex items-center px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
+                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+                Reset
+            </button>
+            
+            <button id="nextBtn" class="flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                Next
+                <svg class="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Instructions -->
+        <div class="mt-8 text-center text-sm text-gray-600">
+            <p>💡 Study tip: Click cards to flip, use navigation buttons, and shuffle for random order</p>
+        </div>
+    </div>
+
+    <script>
+        // Verb data
+        const verbs = [
+            {
+                french: "acheter",
+                english: "to buy",
+                conjugation: {
+                    "je": "achète",
+                    "tu": "achètes",
+                    "il/elle": "achète",
+                    "nous": "achetons",
+                    "vous": "achetez",
+                    "ils/elles": "achètent"
+                },
+                collocations: [
+                    "acheter quelque chose à quelqu'un (to buy something for someone)",
+                    "acheter en ligne (to buy online)"
+                ],
+                example: "J'achète du pain à la boulangerie. (I buy bread at the bakery.)"
+            },
+            {
+                french: "aller",
+                english: "to go",
+                conjugation: {
+                    "je": "vais",
+                    "tu": "vas",
+                    "il/elle": "va",
+                    "nous": "allons",
+                    "vous": "allez",
+                    "ils/elles": "vont"
+                },
+                collocations: [
+                    "aller à (to go to)",
+                    "aller voir (to go see)",
+                    "aller bien (to be well/fine)"
+                ],
+                example: "Je vais à l'école tous les jours. (I go to school every day.)"
+            },
+            {
+                french: "apprendre",
+                english: "to learn",
+                conjugation: {
+                    "je": "apprends",
+                    "tu": "apprends",
+                    "il/elle": "apprend",
+                    "nous": "apprenons",
+                    "vous": "apprenez",
+                    "ils/elles": "apprennent"
+                },
+                collocations: [
+                    "apprendre à faire (to learn to do)",
+                    "apprendre par cœur (to learn by heart)"
+                ],
+                example: "J'apprends le français depuis deux ans. (I have been learning French for two years.)"
+            },
+            {
+                french: "arriver",
+                english: "to arrive",
+                conjugation: {
+                    "je": "arrive",
+                    "tu": "arrives",
+                    "il/elle": "arrive",
+                    "nous": "arrivons",
+                    "vous": "arrivez",
+                    "ils/elles": "arrivent"
+                },
+                collocations: [
+                    "arriver à (to arrive at)",
+                    "arriver à faire (to manage to do)"
+                ],
+                example: "Le train arrive à 15h30. (The train arrives at 3:30 PM.)"
+            },
+            {
+                french: "avoir",
+                english: "to have",
+                conjugation: {
+                    "je": "ai",
+                    "tu": "as",
+                    "il/elle": "a",
+                    "nous": "avons",
+                    "vous": "avez",
+                    "ils/elles": "ont"
+                },
+                collocations: [
+                    "avoir faim/soif (to be hungry/thirsty)",
+                    "avoir besoin de (to need)",
+                    "avoir l'air (to look/seem)"
+                ],
+                example: "J'ai vingt ans. (I am twenty years old.)"
+            },
+            {
+                french: "boire",
+                english: "to drink",
+                conjugation: {
+                    "je": "bois",
+                    "tu": "bois",
+                    "il/elle": "boit",
+                    "nous": "buvons",
+                    "vous": "buvez",
+                    "ils/elles": "boivent"
+                },
+                collocations: [
+                    "boire un verre (to have a drink)",
+                    "boire à la santé de (to drink to someone's health)"
+                ],
+                example: "Je bois du café le matin. (I drink coffee in the morning.)"
+            },
+            {
+                french: "choisir",
+                english: "to choose",
+                conjugation: {
+                    "je": "choisis",
+                    "tu": "choisis",
+                    "il/elle": "choisit",
+                    "nous": "choisissons",
+                    "vous": "choisissez",
+                    "ils/elles": "choisissent"
+                },
+                collocations: [
+                    "choisir entre (to choose between)",
+                    "choisir de faire (to choose to do)"
+                ],
+                example: "Je choisis toujours des fruits frais. (I always choose fresh fruits.)"
+            },
+            {
+                french: "comprendre",
+                english: "to understand",
+                conjugation: {
+                    "je": "comprends",
+                    "tu": "comprends",
+                    "il/elle": "comprend",
+                    "nous": "comprenons",
+                    "vous": "comprenez",
+                    "ils/elles": "comprennent"
+                },
+                collocations: [
+                    "comprendre bien/mal (to understand well/poorly)",
+                    "se faire comprendre (to make oneself understood)"
+                ],
+                example: "Je ne comprends pas cette question. (I don't understand this question.)"
+            },
+            {
+                french: "connaître",
+                english: "to know",
+                conjugation: {
+                    "je": "connais",
+                    "tu": "connais",
+                    "il/elle": "connaît",
+                    "nous": "connaissons",
+                    "vous": "connaissez",
+                    "ils/elles": "connaissent"
+                },
+                collocations: [
+                    "connaître quelqu'un (to know someone)",
+                    "connaître par cœur (to know by heart)"
+                ],
+                example: "Je connais bien cette ville. (I know this city well.)"
+            },
+            {
+                french: "donner",
+                english: "to give",
+                conjugation: {
+                    "je": "donne",
+                    "tu": "donnes",
+                    "il/elle": "donne",
+                    "nous": "donnons",
+                    "vous": "donnez",
+                    "ils/elles": "donnent"
+                },
+                collocations: [
+                    "donner quelque chose à quelqu'un (to give something to someone)",
+                    "donner rendez-vous (to make an appointment)"
+                ],
+                example: "Je donne un cadeau à mon ami. (I give a gift to my friend.)"
+            },
+            {
+                french: "écouter",
+                english: "to listen",
+                conjugation: {
+                    "je": "écoute",
+                    "tu": "écoutes",
+                    "il/elle": "écoute",
+                    "nous": "écoutons",
+                    "vous": "écoutez",
+                    "ils/elles": "écoutent"
+                },
+                collocations: [
+                    "écouter attentivement (to listen carefully)",
+                    "écouter de la musique (to listen to music)"
+                ],
+                example: "J'écoute de la musique classique. (I listen to classical music.)"
+            },
+            {
+                french: "écrire",
+                english: "to write",
+                conjugation: {
+                    "je": "écris",
+                    "tu": "écris",
+                    "il/elle": "écrit",
+                    "nous": "écrivons",
+                    "vous": "écrivez",
+                    "ils/elles": "écrivent"
+                },
+                collocations: [
+                    "écrire à quelqu'un (to write to someone)",
+                    "écrire un livre (to write a book)"
+                ],
+                example: "J'écris une lettre à ma grand-mère. (I write a letter to my grandmother.)"
+            },
+            {
+                french: "être",
+                english: "to be",
+                conjugation: {
+                    "je": "suis",
+                    "tu": "es",
+                    "il/elle": "est",
+                    "nous": "sommes",
+                    "vous": "êtes",
+                    "ils/elles": "sont"
+                },
+                collocations: [
+                    "être en train de (to be in the process of)",
+                    "être d'accord (to agree)"
+                ],
+                example: "Je suis étudiant. (I am a student.)"
+            },
+            {
+                french: "faire",
+                english: "to do/make",
+                conjugation: {
+                    "je": "fais",
+                    "tu": "fais",
+                    "il/elle": "fait",
+                    "nous": "faisons",
+                    "vous": "faites",
+                    "ils/elles": "font"
+                },
+                collocations: [
+                    "faire du sport (to do sports)",
+                    "faire attention (to pay attention)",
+                    "faire la cuisine (to cook)"
+                ],
+                example: "Je fais mes devoirs tous les soirs. (I do my homework every evening.)"
+            },
+            {
+                french: "lire",
+                english: "to read",
+                conjugation: {
+                    "je": "lis",
+                    "tu": "lis",
+                    "il/elle": "lit",
+                    "nous": "lisons",
+                    "vous": "lisez",
+                    "ils/elles": "lisent"
+                },
+                collocations: [
+                    "lire un livre (to read a book)",
+                    "lire à voix haute (to read aloud)"
+                ],
+                example: "Je lis le journal chaque matin. (I read the newspaper every morning.)"
+            },
+            {
+                french: "manger",
+                english: "to eat",
+                conjugation: {
+                    "je": "mange",
+                    "tu": "manges",
+                    "il/elle": "mange",
+                    "nous": "mangeons",
+                    "vous": "mangez",
+                    "ils/elles": "mangent"
+                },
+                collocations: [
+                    "manger au restaurant (to eat at a restaurant)",
+                    "manger sainement (to eat healthily)"
+                ],
+                example: "Je mange des légumes tous les jours. (I eat vegetables every day.)"
+            },
+            {
+                french: "parler",
+                english: "to speak",
+                conjugation: {
+                    "je": "parle",
+                    "tu": "parles",
+                    "il/elle": "parle",
+                    "nous": "parlons",
+                    "vous": "parlez",
+                    "ils/elles": "parlent"
+                },
+                collocations: [
+                    "parler de (to talk about)",
+                    "parler à quelqu'un (to speak to someone)",
+                    "parler couramment (to speak fluently)"
+                ],
+                example: "Je parle français et anglais. (I speak French and English.)"
+            },
+            {
+                french: "partir",
+                english: "to leave",
+                conjugation: {
+                    "je": "pars",
+                    "tu": "pars",
+                    "il/elle": "part",
+                    "nous": "partons",
+                    "vous": "partez",
+                    "ils/elles": "partent"
+                },
+                collocations: [
+                    "partir en voyage (to go on a trip)",
+                    "partir de (to leave from)"
+                ],
+                example: "Je pars en vacances demain. (I'm going on vacation tomorrow.)"
+            },
+            {
+                french: "pouvoir",
+                english: "can/to be able to",
+                conjugation: {
+                    "je": "peux",
+                    "tu": "peux",
+                    "il/elle": "peut",
+                    "nous": "pouvons",
+                    "vous": "pouvez",
+                    "ils/elles": "peuvent"
+                },
+                collocations: [
+                    "pouvoir faire (to be able to do)",
+                    "ne pas pouvoir (cannot)"
+                ],
+                example: "Je peux t'aider demain. (I can help you tomorrow.)"
+            },
+            {
+                french: "prendre",
+                english: "to take",
+                conjugation: {
+                    "je": "prends",
+                    "tu": "prends",
+                    "il/elle": "prend",
+                    "nous": "prenons",
+                    "vous": "prenez",
+                    "ils/elles": "prennent"
+                },
+                collocations: [
+                    "prendre le métro (to take the subway)",
+                    "prendre un café (to have a coffee)",
+                    "prendre une décision (to make a decision)"
+                ],
+                example: "Je prends le bus pour aller au travail. (I take the bus to go to work.)"
+            },
+            {
+                french: "regarder",
+                english: "to watch/look at",
+                conjugation: {
+                    "je": "regarde",
+                    "tu": "regardes",
+                    "il/elle": "regarde",
+                    "nous": "regardons",
+                    "vous": "regardez",
+                    "ils/elles": "regardent"
+                },
+                collocations: [
+                    "regarder la télé (to watch TV)",
+                    "regarder par la fenêtre (to look out the window)"
+                ],
+                example: "Je regarde un film ce soir. (I'm watching a movie tonight.)"
+            },
+            {
+                french: "savoir",
+                english: "to know",
+                conjugation: {
+                    "je": "sais",
+                    "tu": "sais",
+                    "il/elle": "sait",
+                    "nous": "savons",
+                    "vous": "savez",
+                    "ils/elles": "savent"
+                },
+                collocations: [
+                    "savoir faire (to know how to do)",
+                    "savoir par cœur (to know by heart)"
+                ],
+                example: "Je sais jouer du piano. (I know how to play piano.)"
+            },
+            {
+                french: "sortir",
+                english: "to go out",
+                conjugation: {
+                    "je": "sors",
+                    "tu": "sors",
+                    "il/elle": "sort",
+                    "nous": "sortons",
+                    "vous": "sortez",
+                    "ils/elles": "sortent"
+                },
+                collocations: [
+                    "sortir avec des amis (to go out with friends)",
+                    "sortir de (to go out of/leave)"
+                ],
+                example: "Je sors avec mes amis ce week-end. (I'm going out with my friends this weekend.)"
+            },
+            {
+                french: "venir",
+                english: "to come",
+                conjugation: {
+                    "je": "viens",
+                    "tu": "viens",
+                    "il/elle": "vient",
+                    "nous": "venons",
+                    "vous": "venez",
+                    "ils/elles": "viennent"
+                },
+                collocations: [
+                    "venir de (to have just done)",
+                    "venir voir (to come see)"
+                ],
+                example: "Je viens de finir mon travail. (I have just finished my work.)"
+            },
+            {
+                french: "voir",
+                english: "to see",
+                conjugation: {
+                    "je": "vois",
+                    "tu": "vois",
+                    "il/elle": "voit",
+                    "nous": "voyons",
+                    "vous": "voyez",
+                    "ils/elles": "voient"
+                },
+                collocations: [
+                    "voir un film (to see a movie)",
+                    "voir quelqu'un (to see someone)"
+                ],
+                example: "Je vois mes parents chaque semaine. (I see my parents every week.)"
+            },
+            {
+                french: "vouloir",
+                english: "to want",
+                conjugation: {
+                    "je": "veux",
+                    "tu": "veux",
+                    "il/elle": "veut",
+                    "nous": "voulons",
+                    "vous": "voulez",
+                    "ils/elles": "veulent"
+                },
+                collocations: [
+                    "vouloir faire (to want to do)",
+                    "vouloir dire (to mean)"
+                ],
+                example: "Je veux apprendre le français. (I want to learn French.)"
+            }
+        ];
+
+        // State variables
+        let currentIndex = 0;
+        let isFlipped = false;
+        let shuffledVerbs = [...verbs];
+
+        // DOM elements
+        const flashcard = document.getElementById('flashcard');
+        const frenchWord = document.getElementById('frenchWord');
+        const englishWord = document.getElementById('englishWord');
+        const conjugationGrid = document.getElementById('conjugationGrid');
+        const collocationsList = document.getElementById('collocationsList');
+        const exampleText = document.getElementById('exampleText');
+        const cardCounter = document.getElementById('cardCounter');
+        const progressBar = document.getElementById('progressBar');
+
+        // Initialize
+        function init() {
+            updateCard();
+            setupEventListeners();
+        }
+
+        function setupEventListeners() {
+            // Card flip
+            flashcard.addEventListener('click', flipCard);
+            
+            // Navigation buttons
+            document.getElementById('prevBtn').addEventListener('click', prevCard);
+            document.getElementById('nextBtn').addEventListener('click', nextCard);
+            document.getElementById('shuffleBtn').addEventListener('click', shuffleCards);
+            document.getElementById('resetBtn').addEventListener('click', resetCards);
+        }
+
+        function updateCard() {
+            const currentVerb = shuffledVerbs[currentIndex];
+            
+            // Update front of card
+            frenchWord.textContent = currentVerb.french;
+            englishWord.textContent = currentVerb.english;
+            
+            // Update back of card
+            updateConjugation(currentVerb.conjugation);
+            updateCollocations(currentVerb.collocations);
+            exampleText.textContent = currentVerb.example;
+            
+            // Update progress
+            cardCounter.textContent = `Card ${currentIndex + 1} / ${shuffledVerbs.length}`;
+            const progressPercent = ((currentIndex + 1) / shuffledVerbs.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+        }
+
+        function updateConjugation(conjugation) {
+            conjugationGrid.innerHTML = '';
+            Object.entries(conjugation).forEach(([pronoun, verb]) => {
+                const div = document.createElement('div');
+                div.className = 'flex justify-between bg-green-50 px-3 py-2 rounded';
+                div.innerHTML = `
+                    <span class="font-medium">${pronoun}</span>
+                    <span class="text-green-700">${verb}</span>
+                `;
+                conjugationGrid.appendChild(div);
+            });
+        }
+
+        function updateCollocations(collocations) {
+            collocationsList.innerHTML = '';
+            collocations.forEach(collocation => {
+                const div = document.createElement('div');
+                div.className = 'text-sm bg-purple-50 px-3 py-2 rounded';
+                div.textContent = collocation;
+                collocationsList.appendChild(div);
+            });
+        }
+
+        function flipCard() {
+            isFlipped = !isFlipped;
+            if (isFlipped) {
+                flashcard.classList.add('card-flipped');
+            } else {
+                flashcard.classList.remove('card-flipped');
+            }
+        }
+
+        function nextCard() {
+            currentIndex = (currentIndex + 1) % shuffledVerbs.length;
+            isFlipped = false;
+            flashcard.classList.remove('card-flipped');
+            updateCard();
+        }
+
+        function prevCard() {
+            currentIndex = (currentIndex - 1 + shuffledVerbs.length) % shuffledVerbs.length;
+            isFlipped = false;
+            flashcard.classList.remove('card-flipped');
+            updateCard();
+        }
+
+        function shuffleCards() {
+            shuffledVerbs = [...verbs].sort(() => Math.random() - 0.5);
+            currentIndex = 0;
+            isFlipped = false;
+            flashcard.classList.remove('card-flipped');
+            updateCard();
+        }
+
+        function resetCards() {
+            shuffledVerbs = [...verbs];
+            currentIndex = 0;
+            isFlipped = false;
+            flashcard.classList.remove('card-flipped');
+            updateCard();
+        }
+
+        // Start the app
+        init();
+    </script>
+</body>
+</html>
