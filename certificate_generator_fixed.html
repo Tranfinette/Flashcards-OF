@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur de Certificat de Félicitations</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #1a4c3a 0%, #0d2818 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        h1 {
+            text-align: center;
+            color: #f5f1e8;
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 6px rgba(0,0,0,0.4);
+            grid-column: 1 / -1;
+            letter-spacing: 1px;
+        }
+
+        .input-form {
+            background: rgba(245, 241, 232, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            border: 1px solid rgba(245, 241, 232, 0.3);
+        }
+
+        .input-form h2 {
+            color: #2c4a3f;
+            margin-bottom: 30px;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: #2c4a3f;
+            font-weight: 600;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #d4c4a8;
+            border-radius: 15px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.9);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #1a4c3a;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(26, 76, 58, 0.2);
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #1a4c3a 0%, #0d2818 100%);
+            color: #f5f1e8;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(26, 76, 58, 0.4);
+        }
+
+        .certificate-container {
+            background: rgba(245, 241, 232, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            border: 1px solid rgba(245, 241, 232, 0.3);
+            text-align: center;
+        }
+
+        .certificate-container h2 {
+            color: #2c4a3f;
+            margin-bottom: 30px;
+            font-size: 2rem;
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+
+        .certificate {
+            background: #1a4c3a;
+            border-radius: 25px;
+            padding: 50px 40px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+            border: 8px solid #1a4c3a;
+        }
+
+        .certificate-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .decorative-border {
+            border: 3px solid #d4af37;
+            border-radius: 20px;
+            padding: 40px 30px;
+            margin: 0;
+            background: transparent;
+            position: relative;
+        }
+
+        .decorative-border::before {
+            content: '';
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            right: 12px;
+            bottom: 12px;
+            border: 1px solid #d4af37;
+            border-radius: 15px;
+        }
+
+        .felicitations-line {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+            color: #d4af37;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .student-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #dc2626;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+            letter-spacing: 1px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .achievement-section {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 600;
+            margin: 25px 0 35px 0;
+            color: #dc2626;
+            line-height: 1.3;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .bravo-section {
+            margin: 35px 0;
+            padding: 15px;
+            background: transparent;
+            border-radius: 15px;
+            border: 2px solid #d4af37;
+        }
+
+        .bravo-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #d4af37;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .etapes-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        @media (max-width: 768px) {
+            .etapes-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+            }
+        }
+
+        .etape-item {
+            background: transparent;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            border: 1px solid #d4af37;
+            color: #d4af37;
+            font-weight: 500;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70px;
+        }
+
+        .etape-label {
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #d4af37;
+            font-size: 1.2rem;
+        }
+
+        .teacher-name {
+            color: #dc2626;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #d4af37 0%, #b8941f 100%);
+            color: #1a4c3a;
+            padding: 18px 35px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 25px;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(212, 175, 55, 0.4);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .star {
+            position: absolute;
+            color: #d4af37;
+            font-size: 1.5rem;
+            animation: twinkle 3s infinite;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.9); }
+        }
+
+        .star:nth-child(1) { top: 15px; left: 25px; animation-delay: 0s; }
+        .star:nth-child(2) { top: 20px; right: 30px; animation-delay: 1s; }
+        .star:nth-child(3) { bottom: 30px; left: 35px; animation-delay: 2s; }
+        .star:nth-child(4) { bottom: 25px; right: 25px; animation-delay: 0.5s; }
+
+        .certificate {
+            animation: certificateGlow 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes certificateGlow {
+            0% { box-shadow: 0 30px 60px rgba(0,0,0,0.2), 0 0 20px rgba(212, 175, 55, 0.1); }
+            100% { box-shadow: 0 30px 60px rgba(0,0,0,0.2), 0 0 30px rgba(212, 175, 55, 0.15); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✨ Générateur de Certificat de Félicitations ✨</h1>
+        
+        <div class="input-form">
+            <h2>📝 Informations du Certificat</h2>
+            <div class="form-group">
+                <label for="nom">🎓 Nom de l'apprenant :</label>
+                <input type="text" id="nom" name="nom" placeholder="Entrez le nom de l'apprenant">
+            </div>
+            <div class="form-group">
+                <label for="achievement">🏆 Résultat complet (ex: pour son C au test oral) :</label>
+                <input type="text" id="achievement" name="achievement" placeholder="ex: pour son C au test oral">
+            </div>
+            <div class="form-group">
+                <label for="etape1">📌 Étape 1 :</label>
+                <input type="text" id="etape1" name="etape1" placeholder="Première étape accomplie">
+            </div>
+            <div class="form-group">
+                <label for="etape2">📌 Étape 2 :</label>
+                <input type="text" id="etape2" name="etape2" placeholder="Deuxième étape accomplie">
+            </div>
+            <div class="form-group">
+                <label for="etape3">📌 Étape 3 :</label>
+                <input type="text" id="etape3" name="etape3" placeholder="Troisième étape accomplie">
+            </div>
+            <div class="form-group">
+                <label for="etape4">📌 Étape 4 :</label>
+                <input type="text" id="etape4" name="etape4" placeholder="Quatrième étape accomplie">
+            </div>
+            <div class="form-group">
+                <label for="etape5">📌 Étape 5 :</label>
+                <input type="text" id="etape5" name="etape5" placeholder="Cinquième étape accomplie">
+            </div>
+            <div class="form-group">
+                <label for="etape6">📌 Étape 6 :</label>
+                <input type="text" id="etape6" name="etape6" placeholder="Sixième étape accomplie">
+            </div>
+            <div class="form-group">
+                <label for="tutorat">👨‍🏫 Tutorat :</label>
+                <input type="text" id="tutorat" name="tutorat" placeholder="Informations sur le tutorat reçu">
+            </div>
+            <div class="form-group">
+                <label for="simulation">🎯 Simulation :</label>
+                <input type="text" id="simulation" name="simulation" placeholder="Détails sur les simulations effectuées">
+            </div>
+            <div class="form-group">
+                <label for="remplacement">🔄 Remplacement :</label>
+                <input type="text" id="remplacement" name="remplacement" placeholder="Informations sur les remplacements">
+            </div>
+            <button class="generate-btn" onclick="generateCertificate()">🎨 Générer le Certificat</button>
+        </div>
+
+        <div id="certificate-container" class="certificate-container hidden">
+            <h2>🌟 Aperçu du Certificat</h2>
+            <div id="certificate" class="certificate">
+                <div class="star">⭐</div>
+                <div class="star">✨</div>
+                <div class="star">🌟</div>
+                <div class="star">⭐</div>
+                
+                <div class="decorative-border">
+                    <div class="certificate-content">
+                        <div class="felicitations-line">
+                            FÉLICITATIONS À
+                        </div>
+                        
+                        <div class="student-name" id="display-nom">Nom de l'Apprenant</div>
+                        
+                        <div class="achievement-section" id="display-achievement">
+                            pour son excellence
+                        </div>
+                        
+                        <div class="bravo-section">
+                            <div class="bravo-title">🎉 BRAVO ET MERCI À 🎉</div>
+                            <div class="etapes-grid">
+                                <div class="etape-item">
+                                    <span class="etape-label">Étape 1</span>
+                                    <span class="teacher-name" id="display-etape1">-</span>
+                                </div>
+                                <div class="etape-item">
+                                    <span class="etape-label">Étape 2</span>
+                                    <span class="teacher-name" id="display-etape2">-</span>
+                                </div>
+                                <div class="etape-item">
+                                    <span class="etape-label">Étape 3</span>
+                                    <span class="teacher-name" id="display-etape3">-</span>
+                                </div>
+                                <div class="etape-item">
+                                    <span class="etape-label">Étape 4</span>
+                                    <span class="teacher-name" id="display-etape4">-</span>
+                                </div>
+                                <div class="etape-item">
+                                    <span class="etape-label">Étape 5</span>
+                                    <span class="teacher-name" id="display-etape5">-</span>
+                                </div>
+                                <div class="etape-item">
+                                    <span class="etape-label">Étape 6</span>
+                                    <span class="teacher-name" id="display-etape6">-</span>
+                                </div>
+                                <div class="etape-item">
+                                    <span class="etape-label">Tutorat</span>
+                                    <span class="teacher-name" id="display-tutorat">-</span>
+                                </div>
+                                <div class="etape-item">
+                                    <span class="etape-label">Simulation</span>
+                                    <span class="teacher-name" id="display-simulation">-</span>
+                                </div>
+                                <div class="etape-item">
+                                    <span class="etape-label">Remplacement</span>
+                                    <span class="teacher-name" id="display-remplacement">-</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="download-btn" onclick="downloadCertificate()">📱 Télécharger l'Image</button>
+        </div>
+    </div>
+
+    <script>
+        function generateCertificate() {
+            const nom = document.getElementById('nom').value.trim();
+            const achievement = document.getElementById('achievement').value.trim();
+            const etape1 = document.getElementById('etape1').value.trim();
+            const etape2 = document.getElementById('etape2').value.trim();
+            const etape3 = document.getElementById('etape3').value.trim();
+            const etape4 = document.getElementById('etape4').value.trim();
+            const etape5 = document.getElementById('etape5').value.trim();
+            const etape6 = document.getElementById('etape6').value.trim();
+            const tutorat = document.getElementById('tutorat').value.trim();
+            const simulation = document.getElementById('simulation').value.trim();
+            const remplacement = document.getElementById('remplacement').value.trim();
+
+            if (!nom) {
+                alert('Veuillez entrer le nom de l\'apprenant !');
+                return;
+            }
+
+            document.getElementById('display-nom').textContent = nom;
+            document.getElementById('display-achievement').textContent = achievement || 'pour son excellence';
+            
+            document.getElementById('display-etape1').textContent = etape1 || '-';
+            document.getElementById('display-etape2').textContent = etape2 || '-';
+            document.getElementById('display-etape3').textContent = etape3 || '-';
+            document.getElementById('display-etape4').textContent = etape4 || '-';
+            document.getElementById('display-etape5').textContent = etape5 || '-';
+            document.getElementById('display-etape6').textContent = etape6 || '-';
+            document.getElementById('display-tutorat').textContent = tutorat || '-';
+            document.getElementById('display-simulation').textContent = simulation || '-';
+            document.getElementById('display-remplacement').textContent = remplacement || '-';
+
+            document.getElementById('certificate-container').classList.remove('hidden');
+            
+            document.getElementById('certificate-container').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        function downloadCertificate() {
+            const certificate = document.getElementById('certificate');
+            const downloadBtn = document.querySelector('.download-btn');
+            const originalText = downloadBtn.textContent;
+            downloadBtn.textContent = '🎨 Génération en cours...';
+            downloadBtn.disabled = true;
+
+            const options = {
+                scale: 4,
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: null,
+                width: certificate.offsetWidth,
+                height: certificate.offsetHeight,
+                scrollX: 0,
+                scrollY: 0,
+                logging: false
+            };
+
+            html2canvas(certificate, options).then(canvas => {
+                const link = document.createElement('a');
+                const studentName = document.getElementById('display-nom').textContent;
+                const date = new Date().toLocaleDateString('fr-FR');
+                link.download = `Certificat_${studentName}_${date}.png`;
+                link.href = canvas.toDataURL('image/png', 1.0);
+                
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                downloadBtn.textContent = originalText;
+                downloadBtn.disabled = false;
+                
+                showNotification('✅ Image téléchargée avec succès !');
+            }).catch(error => {
+                console.error('Erreur lors de la génération de l\'image :', error);
+                downloadBtn.textContent = originalText;
+                downloadBtn.disabled = false;
+                showNotification('❌ Échec de la génération, veuillez réessayer');
+            });
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 30px;
+                right: 30px;
+                background: linear-gradient(135deg, #1a4c3a 0%, #0d2818 100%);
+                color: #f5f1e8;
+                padding: 20px 25px;
+                border-radius: 15px;
+                z-index: 1000;
+                font-weight: 600;
+                font-family: 'Montserrat', sans-serif;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+                border: 2px solid #d4af37;
+                transform: translateX(100%);
+                transition: transform 0.4s ease;
+                font-size: 1rem;
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 400);
+            }, 4000);
+        }
+
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+                this.parentElement.style.transition = 'transform 0.3s ease';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
+
+        window.addEventListener('load', function() {
+            const elements = document.querySelectorAll('.input-form, .certificate-container');
+            elements.forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'all 0.6s ease';
+                
+                setTimeout(() => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        });
+    </script>
+</body>
+</html>
