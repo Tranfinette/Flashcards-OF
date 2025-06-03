@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每月员工生日贺卡</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .control-panel {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 20px;
+        }
+
+        .control-panel h2 {
+            color: #333;
+            margin-bottom: 25px;
+            font-size: 1.5em;
+            text-align: center;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        .input-group select, .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .input-group select:focus, .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .employee-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .employee-input input {
+            flex: 2;
+        }
+
+        .employee-input input:last-child {
+            flex: 1;
+        }
+
+        .add-employee-btn, .generate-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+        .add-employee-btn {
+            background: #4ecdc4;
+            color: white;
+        }
+
+        .add-employee-btn:hover {
+            background: #45b7d1;
+            transform: translateY(-2px);
+        }
+
+        .generate-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 16px;
+            padding: 15px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .employee-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #e1e5e9;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .employee-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            margin-bottom: 5px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .remove-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .birthday-card {
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 30%, #d1fae5 70%, #bbf7d0 100%);
+            border-radius: 25px;
+            box-shadow: 0 25px 50px rgba(34, 197, 94, 0.15);
+            position: relative;
+            overflow: hidden;
+            animation: cardFloat 6s ease-in-out infinite;
+            min-height: 600px;
+            padding: 40px;
+            border: 3px solid #86efac;
+        }
+
+        @keyframes cardFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .card-decoration {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+
+        .balloon {
+            position: absolute;
+            width: 25px;
+            height: 35px;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: balloonFloat 4s ease-in-out infinite;
+        }
+
+        .balloon:nth-child(1) { background: #86efac; top: 30px; left: 40px; animation-delay: 0s; }
+        .balloon:nth-child(2) { background: #7dd3fc; top: 50px; right: 50px; animation-delay: 1s; }
+        .balloon:nth-child(3) { background: #fde68a; bottom: 80px; left: 60px; animation-delay: 2s; }
+        .balloon:nth-child(4) { background: #f0abfc; bottom: 60px; right: 70px; animation-delay: 1.5s; }
+        .balloon:nth-child(5) { background: #c7d2fe; top: 120px; left: 20px; animation-delay: 0.5s; }
+        .balloon:nth-child(6) { background: #fed7aa; top: 80px; right: 20px; animation-delay: 2.5s; }
+
+        @keyframes balloonFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-15px) rotate(2deg); }
+            75% { transform: translateY(-5px) rotate(-2deg); }
+        }
+
+        .confetti {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            animation: confettiFall 4s linear infinite;
+        }
+
+        .confetti:nth-child(7) { left: 15%; animation-delay: 0s; background: #86efac; }
+        .confetti:nth-child(8) { left: 25%; animation-delay: 0.5s; background: #7dd3fc; }
+        .confetti:nth-child(9) { left: 35%; animation-delay: 1s; background: #fde68a; }
+        .confetti:nth-child(10) { left: 45%; animation-delay: 1.5s; background: #d1d5db; }
+        .confetti:nth-child(11) { left: 55%; animation-delay: 2s; background: #c7d2fe; }
+        .confetti:nth-child(12) { left: 65%; animation-delay: 0.3s; background: #fed7aa; }
+        .confetti:nth-child(13) { left: 75%; animation-delay: 0.8s; background: #86efac; }
+        .confetti:nth-child(14) { left: 85%; animation-delay: 1.3s; background: #7dd3fc; }
+
+        @keyframes confettiFall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(700px) rotate(360deg); opacity: 0; }
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 40px;
+            z-index: 10;
+            position: relative;
+        }
+
+        .card-title {
+            font-size: 2.8em;
+            font-weight: bold;
+            color: #dc2626;
+            text-shadow: 2px 2px 4px rgba(220, 38, 38, 0.3);
+            margin-bottom: 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .french-title {
+            font-size: 1em;
+            color: #dc2626;
+        }
+
+        .english-title {
+            font-size: 0.8em;
+            color: #dc2626;
+            font-style: italic;
+        }
+
+        .card-month {
+            font-size: 1.5em;
+            color: #dc2626;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(220, 38, 38, 0.2);
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px 20px;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+            display: inline-block;
+            border: 2px solid #fecaca;
+        }
+
+        .birthday-emoji {
+            font-size: 80px;
+            margin: 20px 0;
+            animation: bounce 2s infinite;
+        }
+
+        .cartoon-elements {
+            position: absolute;
+            font-size: 40px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .cartoon-1 { top: 10%; left: 10%; animation-delay: 0s; }
+        .cartoon-2 { top: 15%; right: 15%; animation-delay: 1s; }
+        .cartoon-3 { bottom: 20%; left: 8%; animation-delay: 2s; }
+        .cartoon-4 { bottom: 15%; right: 12%; animation-delay: 1.5s; }
+        .cartoon-5 { top: 40%; left: 5%; animation-delay: 0.5s; }
+        .cartoon-6 { top: 45%; right: 8%; animation-delay: 2.5s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-15px); }
+            60% { transform: translateY(-8px); }
+        }
+
+        .employees-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            z-index: 10;
+            position: relative;
+        }
+
+        .employee-card {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 50%, #bbf7d0 100%);
+            border: 2px solid #86efac;
+            border-radius: 20px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(34, 197, 94, 0.15);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            min-height: 160px;
+        }
+
+        .employee-card:hover {
+            transform: translateY(-8px) scale(1.05) rotate(1deg);
+            box-shadow: 0 15px 30px rgba(34, 197, 94, 0.25);
+            border-color: #22c55e;
+        }
+
+        .employee-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #7dd3fc 0%, #38bdf8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-size: 1.2em;
+            color: white;
+            font-weight: bold;
+            border: 4px solid white;
+            box-shadow: 0 6px 16px rgba(125, 211, 252, 0.4);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .employee-date {
+            font-size: 1.2em;
+            color: #16a34a;
+            margin-bottom: 8px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(22, 163, 74, 0.2);
+        }
+
+        .employee-cartoon {
+            font-size: 2em;
+            margin-top: 5px;
+            animation: wiggle 2s ease-in-out infinite;
+        }
+
+        .card-decoration-mini {
+            position: absolute;
+            font-size: 1.4em;
+            opacity: 0.8;
+            animation: miniFloat 3s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        @keyframes miniFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(15deg); }
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg); }
+            75% { transform: rotate(5deg); }
+        }
+
+        .no-employees {
+            text-align: center;
+            color: #6b7280;
+            font-size: 1.2em;
+            margin-top: 50px;
+            font-style: italic;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .control-panel {
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .employees-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .card-title {
+                font-size: 2.5em;
+            }
+            
+            .birthday-card {
+                padding: 20px;
+                min-height: 500px;
+            }
+        }
+    </style>
+
+<!-- html2canvas 脚本 -->
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+</head>
+<body>
+    <div class="container">
+        <div class="control-panel">
+            <h2>🎂 Carte d'anniversaire mensuelle</h2>
+            
+            <div class="input-group">
+                <label for="selectedMonth">Sélectionner le mois</label>
+                <select id="selectedMonth">
+                    <option value="1">Janvier</option>
+                    <option value="2">Février</option>
+                    <option value="3">Mars</option>
+                    <option value="4">Avril</option>
+                    <option value="5">Mai</option>
+                    <option value="6" selected>Juin</option>
+                    <option value="7">Juillet</option>
+                    <option value="8">Août</option>
+                    <option value="9">Septembre</option>
+                    <option value="10">Octobre</option>
+                    <option value="11">Novembre</option>
+                    <option value="12">Décembre</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Ajouter un employé</label>
+                <div class="employee-input">
+                    <input type="text" id="employeeName" placeholder="Nom de l'employé">
+                    <input type="number" id="employeeDay" min="1" max="31" placeholder="Date d'anniversaire">
+                </div>
+                <button class="add-employee-btn" onclick="addEmployee()">+ Ajouter employé</button>
+            </div>
+
+            <div class="input-group">
+                <label>Employés anniversaires ce mois</label>
+                <div class="employee-list" id="employeeList">
+                    <div style="text-align: center; color: #999; padding: 20px;">
+                        Aucune information d'employé
+                    </div>
+                </div>
+            </div>
+
+            <button class="generate-btn" onclick="generateCard()">🎉 Générer la carte</button>
+
+<button class="generate-btn" onclick="downloadCard()">📥 Télécharger la carte</button>
+
+        </div>
+
+        <div class="birthday-card" id="birthdayCard">
+            <div class="card-decoration">
+                <div class="balloon"></div>
+                <div class="balloon"></div>
+                <div class="balloon"></div>
+                <div class="balloon"></div>
+                <div class="balloon"></div>
+                <div class="balloon"></div>
+                <div class="confetti"></div>
+                <div class="confetti"></div>
+                <div class="confetti"></div>
+                <div class="confetti"></div>
+                <div class="confetti"></div>
+                <div class="confetti"></div>
+                <div class="confetti"></div>
+                <div class="confetti"></div>
+                <div class="cartoon-elements cartoon-1">🎈</div>
+                <div class="cartoon-elements cartoon-2">🌟</div>
+                <div class="cartoon-elements cartoon-3">🎁</div>
+                <div class="cartoon-elements cartoon-4">🍰</div>
+                <div class="cartoon-elements cartoon-5">🎪</div>
+                <div class="cartoon-elements cartoon-6">🎊</div>
+            </div>
+            
+            <div class="card-header">
+                <div class="card-title">
+                    <div class="french-title">Joyeux Anniversaire</div>
+                    <div class="english-title">Happy Birthday</div>
+                </div>
+                <div class="birthday-emoji">🎂🎉</div>
+                <div class="card-month" id="cardMonth">à nos collègues</div>
+            </div>
+
+            <div class="employees-grid" id="employeesGrid">
+                <div class="no-employees">
+                    Veuillez ajouter les informations des employés anniversaires de ce mois
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let employees = [];
+
+        const monthNames = {
+            '1': 'Janvier', '2': 'Février', '3': 'Mars', '4': 'Avril',
+            '5': 'Mai', '6': 'Juin', '7': 'Juillet', '8': 'Août',
+            '9': 'Septembre', '10': 'Octobre', '11': 'Novembre', '12': 'Décembre'
+        };
+
+        const cartoonElements = [
+            '🎈', '🎊', '🌟', '🎁', '🍰', '🎪', '🎭', '🎨', '🎯', '🎲',
+            '🌈', '☀️', '🌙', '⭐', '💫', '🎃', '🎄', '🎆', '🎇', '🔮',
+            '🐱', '🐶', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯',
+            '🦁', '🐸', '🐷', '🐵', '🦄', '🐙', '🐳', '🐬', '🦋', '🐝'
+        ];
+
+        const miniDecorations = [
+            '✨', '💖', '🌸', '🦋', '🌺', '🍀', '🌼', '💝', '🎀', '🌷',
+            '💫', '⭐', '🌟', '☀️', '🌙', '💎', '🎈', '🎊', '🎁', '🍭',
+            '🧸', '🎀', '🌻', '🌹', '💕', '💖', '💝', '🎪', '🎭', '🎨',
+            '🐱', '🐶', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯',
+            '🦁', '🐸', '🐷', '🐵', '🐝', '🐧', '🐺', '🦔', '🐿️', '🦘',
+            '🐘', '🦒', '🦓', '🐄', '🐑', '🐐', '🐪', '🦙', '🐾', '🦆'
+        ];
+
+        // 生成随机位置的装饰元素
+        function generateRandomDecorations(count = 8) {
+            let decorations = '';
+            const usedPositions = [];
+            
+            for (let i = 0; i < count; i++) {
+                let position;
+                let attempts = 0;
+                
+                // 尝试找到不重叠的位置
+                do {
+                    position = {
+                        top: Math.random() * 100,
+                        left: Math.random() * 100
+                    };
+                    attempts++;
+                } while (attempts < 20 && usedPositions.some(pos => 
+                    Math.abs(pos.top - position.top) < 15 && Math.abs(pos.left - position.left) < 15
+                ));
+                
+                usedPositions.push(position);
+                
+                const decoration = miniDecorations[Math.floor(Math.random() * miniDecorations.length)];
+                const animationDelay = Math.random() * 3;
+                const rotationDirection = Math.random() > 0.5 ? 1 : -1;
+                
+                decorations += `
+                    <div class="card-decoration-mini" 
+                         style="top: ${position.top}%; 
+                                left: ${position.left}%; 
+                                animation-delay: ${animationDelay}s;
+                                transform: rotate(${rotationDirection * Math.random() * 30}deg);">
+                        ${decoration}
+                    </div>
+                `;
+            }
+            
+            return decorations;
+        }
+
+        function addEmployee() {
+            const name = document.getElementById('employeeName').value.trim();
+            const day = document.getElementById('employeeDay').value;
+            
+            if (!name || !day) {
+                alert('Veuillez saisir le nom de l\'employé et la date d\'anniversaire !');
+                return;
+            }
+            
+            if (day < 1 || day > 31) {
+                alert('Veuillez saisir une date valide (1-31) !');
+                return;
+            }
+            
+            const employee = {
+                name: name,
+                day: parseInt(day),
+                cartoon: cartoonElements[Math.floor(Math.random() * cartoonElements.length)]
+            };
+            
+            employees.push(employee);
+            
+            // 清空输入框
+            document.getElementById('employeeName').value = '';
+            document.getElementById('employeeDay').value = '';
+            
+            updateEmployeeList();
+        }
+
+        function removeEmployee(index) {
+            employees.splice(index, 1);
+            updateEmployeeList();
+        }
+
+        function updateEmployeeList() {
+            const listElement = document.getElementById('employeeList');
+            
+            if (employees.length === 0) {
+                listElement.innerHTML = '<div style="text-align: center; color: #999; padding: 20px;">Aucune information d\'employé</div>';
+                return;
+            }
+            
+            // 按日期排序
+            employees.sort((a, b) => a.day - b.day);
+            
+            listElement.innerHTML = employees.map((emp, index) => `
+                <div class="employee-item">
+                    <span>${emp.name} - ${emp.day}号</span>
+                    <button class="remove-btn" onclick="removeEmployee(${index})">×</button>
+                </div>
+            `).join('');
+        }
+
+        function generateCard() {
+            const selectedMonth = document.getElementById('selectedMonth').value;
+            const monthName = monthNames[selectedMonth];
+            
+            // 更新月份标题
+            document.getElementById('cardMonth').textContent = `à nos collègues`;
+            
+            const employeesGrid = document.getElementById('employeesGrid');
+            
+            if (employees.length === 0) {
+                employeesGrid.innerHTML = '<div class="no-employees">Veuillez ajouter les informations des employés anniversaires de ce mois</div>';
+                return;
+            }
+            
+            // 生成员工卡片
+            employeesGrid.innerHTML = employees.map(emp => {
+                // 为每个员工卡片生成随机的装饰元素
+                const decorations = generateRandomDecorations(Math.floor(Math.random() * 5) + 6);
+                
+                return `
+                    <div class="employee-card">
+                        ${decorations}
+                        <div class="employee-avatar">${emp.name}</div>
+                        <div class="employee-date">${monthName} ${emp.day}</div>
+                        <div class="employee-cartoon">${emp.cartoon}</div>
+                    </div>
+                `;
+            }).join('');
+            
+            // 添加生成动画效果
+            const card = document.getElementById('birthdayCard');
+            card.style.transform = 'scale(0.95)';
+            card.style.transition = 'transform 0.5s ease';
+            
+            setTimeout(() => {
+                card.style.transform = 'scale(1)';
+            }, 100);
+        }
+
+        // 监听回车键添加员工
+        document.getElementById('employeeDay').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addEmployee();
+            }
+        });
+
+        document.getElementById('employeeName').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('employeeDay').focus();
+            }
+        });
+
+        
+function downloadCard() {
+    const card = document.getElementById('birthdayCard');
+    html2canvas(card).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'carte_anniversaire.png';
+        link.href = canvas.toDataURL();
+        link.click();
+    });
+}
+
+
+// 页面加载时生成空卡片
+        window.onload = function() {
+            generateCard();
+        };
+    </script>
+</body>
+</html>
