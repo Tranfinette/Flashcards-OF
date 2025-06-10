@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau des verbes français</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .category-title {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            padding: 15px;
+            margin: 25px 0 15px 0;
+            border-radius: 8px;
+            font-size: 1.3em;
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        th {
+            background: linear-gradient(45deg, #34495e, #2c3e50);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+            font-size: 1.1em;
+            border: none;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border: none;
+            vertical-align: top;
+            line-height: 1.6;
+        }
+        
+        tr:nth-child(even) {
+            background: linear-gradient(90deg, #f8f9fa, #e9ecef);
+        }
+        
+        tr:nth-child(odd) {
+            background: linear-gradient(90deg, #fff, #f8f9fa);
+        }
+        
+        tr:hover {
+            background: linear-gradient(90deg, #e3f2fd, #bbdefb);
+            transform: scale(1.01);
+            transition: all 0.3s ease;
+        }
+        
+        .french-verb {
+            font-weight: bold;
+            color: #e74c3c;
+            font-size: 1.1em;
+        }
+        
+        .conjugation {
+            color: #8e44ad;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.4;
+        }
+        
+        .english {
+            color: #27ae60;
+            font-weight: 600;
+            font-style: italic;
+        }
+        
+        .examples {
+            color: #2c3e50;
+            font-size: 0.95em;
+        }
+        
+        .example {
+            margin-bottom: 5px;
+            padding: 3px 0;
+        }
+        
+        .example:before {
+            content: "• ";
+            color: #3498db;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                margin: 10px;
+            }
+            
+            table {
+                font-size: 0.9em;
+            }
+            
+            th, td {
+                padding: 8px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🇫🇷 Tableau des verbes français - Conjugaison et exemples</h1>
+        
+        <div class="category-title">Verbes de base</div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 15%;">Verbe français</th>
+                    <th style="width: 25%;">Conjugaison présent</th>
+                    <th style="width: 15%;">Anglais</th>
+                    <th style="width: 45%;">Exemples</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="french-verb">Être</td>
+                    <td class="conjugation">je suis<br>tu es<br>il/elle est<br>nous sommes<br>vous êtes<br>ils/elles sont</td>
+                    <td class="english">to be</td>
+                    <td class="examples">
+                        <div class="example">Je suis étudiant à l'université.</div>
+                        <div class="example">Elle est très gentille avec tout le monde.</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="french-verb">Avoir</td>
+                    <td class="conjugation">j'ai<br>tu as<br>il/elle a<br>nous avons<br>vous avez<br>ils/elles ont</td>
+                    <td class="english">to have</td>
+                    <td class="examples">
+                        <div class="example">J'ai une voiture rouge depuis deux ans.</div>
+                        <div class="example">Nous avons rendez-vous à 15h précises.</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="french-verb">Aller</td>
+                    <td class="conjugation">je vais<br>tu vas<br>il/elle va<br>nous allons<br>vous allez<br>ils/elles vont</td>
+                    <td class="english">to go</td>
+                    <td class="examples">
+                        <div class="example">Je vais au cinéma avec mes amis ce soir.</div>
+                        <div class="example">Ils vont partir en vacances la semaine prochaine.</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="french-verb">Faire</td>
+                    <td class="conjugation">je fais<br>tu fais<br>il/elle fait<br>nous faisons<br>vous faites<br>ils/elles font</td>
+                    <td class="english">to do/make</td>
+                    <td class="examples">
+                        <div class="example">Il fait ses devoirs dans sa chambre.</div>
+                        <div class="example">Nous faisons la cuisine ensemble le dimanche.</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="french-verb">Pouvoir</td>
+                    <td class="conjugation">je peux<br>tu peux<br>il/elle peut<br>nous pouvons<br>vous pouvez<br>ils/elles peuvent</td>
+                    <td class="english">can/to be able</td>
+                    <td class="examples">
+                        <div class="example">Tu peux m'aider avec ce problème ?</div>
+                        <div class="example">Elle peut parler trois langues couramment.</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="french-verb">Vouloir</td>
+                    <td class="conjugation">je veux<br>tu veux<br>il/elle veut<br>nous voulons<br>vous voulez<br>ils/elles veulent</td>
+                    <td class="english">to want</td>
+                    <td class="examples">
+                        <div class="example">Je veux apprendre le français parfaitement.</div>
+                        <div class="example">Ils veulent acheter une nouvelle maison.</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="category-title">Verbes de communication</div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 15%;">Verbe français</th>
+                    <th style="width: 25%;">Conjugaison présent</th>
+                    <th style="width: 15%;">Anglais</th>
+                    <th style="width: 45%;">Exemples</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="french-verb">Parler</td>
+                    <td class="conjugation">je parle<br>tu parles<br>il/elle parle<br>nous parlons<br>vous parlez<br>ils/elles parlent</td>
+                    <td class="english">to speak</td>
+                    <td class="examples">
+                        <div class="example">Je parle français et anglais quotidiennement.</div>
+                        <div class="example">Nous parlons de nos projets d'avenir.</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="french-verb">Appeler</td>
+                    <td class="conjugation">j'appelle<br>tu appelles<br>il/elle appelle<br>nous appelons<br>vous appelez<br>ils/elles appellent</td>
+                    <td class="english">to call</td>
+                    <td class="examples">
+                        <div class="example">Je t'appelle dès que j'arrive au bureau.</div>
+                        <div class="example">Elle appelle un taxi pour rentrer chez elle.</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="french-verb">Dire</td>
+                    <td class="conjugation">je dis<br>tu dis<br>il/elle dit<br>nous disons<br>vous dites<br>ils/elles disent</td>
+                    <td class="english">to say/tell</td>
+                    <td class="examples">
+                        <div class="example">Il dit toujours la vérité à ses amis.</div>
+                        <div class="example">Que dites-vous de cette proposition ?</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="french-verb">Répéter</td>
+                    <td class="conjugation">je répète<br>tu répètes<br>il/elle répète<br>nous répétons<br>vous répétez<br>ils/elles répètent</td>
+                    <td class="english">to repeat</td>
+                    <td class="examples">
+                        <div class="example">Pouvez-vous répéter la question, s'il vous plaît ?</div>
+                        <div class="example">L'enfant répète les mots après son professeur.</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="category-title">Verbes de perception</div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 15%;">Verbe français</th>
+                    <th style="width: 25%;">Conjugaison présent</th>
+                    <th style="width: 15%;">Anglais</th>
+                    <th style="width: 45%;">Exemples</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="french-verb">Voir</td>
+                    <td class="conjugation">je vois<br>tu vois<br>il/elle voit<br>nous voyons<br>vous voyez<br>ils/elles voient</td>
+                    <td class="english">to see</td>
+                    <td class="examples">
+                        <div class="example">Je vois un magnifique oiseau dans l'arbre.</div>
+                        <div class="example">Nous voyons nos amis tous les weekends.</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="french-verb">Écouter</td>
+                    <td class="conjugation">j'écoute<br>tu écoutes<br>il/elle écoute<br>nous écoutons<br>vous écoutez<br>ils/elles écoutent</td>
+                    <td class="english">to listen</td>
+                    <td class="examples">
+                        <div class="example">J'écoute de la musique classique pour me détendre.</div>
+                        <div class="example">Écoutez attentivement les instructions du professeur.</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="french-verb">Comprendre</td>
+                    <td class="conjugation">je comprends<br>tu comprends<br>il/elle comprend<br>nous comprenons<br>vous comprenez<br>ils/elles comprennent</td>
+                    <td class="english">to understand</td>
+                    <td class="examples">
+                        <div class="example">Je comprends votre situation difficile.</div>
+                        <div class="example">Il comprend trois langues étrangères.</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="french-verb">Connaître</td>
+                    <td class="conjugation">je connais<br>tu connais<br>il/elle connaît<br>nous connaissons<br>vous connaissez<br>ils/elles connaissent</td>
+                    <td class="english">to know</td>
+                    <td class="examples">
+                        <div class="example">Je connais très bien cette ville depuis l'enfance.</div>
+                        <div class="example">Elle connaît tous ses voisins par leur nom.</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="category-title">Verbes d'action</div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 15%;">Verbe français</th>
+                    <th style="width: 25%;">Conjugaison présent</th>
+                    <th style="width: 15%;">Anglais</th>
+                    <th style="width: 45%;">Exemples</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="french-verb">Travailler</td>
+                    <td class="conjugation">je travaille<br>tu travailles<br>il/elle travaille<br>nous travaillons<br>vous travaillez<br>ils/elles travaillent</td>
+                    <td class="english">to work</td>
+                    <td class="examples">
+                        <div class="example">Je travaille dans une entreprise internationale.</div>
+                        <div class="example">Elle travaille dur pour atteindre ses objectifs.</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="french-verb">Apprendre</td>
+                    <td class="conjugation">j'apprends<br>tu apprends<br>il/elle apprend<br>nous apprenons<br>vous apprenez<br>ils/elles apprennent</td>
+                    <td class="english">to learn</td>
+                    <td class="examples">
+                        <div class="example">Les enfants apprennent à lire très rapidement.</div>
+                        <div class="example">J'apprends le français depuis six mois maintenant.</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="french-verb">Manger</td>
+                    <td class="conjugation">je mange<br>tu manges<br>il/elle mange<br>nous mangeons<br>vous mangez<br>ils/elles mangent</td>
+                    <td class="english">to eat</td>
+                    <td class="examples">
+                        <div class="example">Nous mangeons ensemble à midi tous les jours.</div>
+                        <div class="example">Elle mange beaucoup de fruits et légumes.</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="french-verb">Jouer</td>
+                    <td class="conjugation">je joue<br>tu joues<br>il/elle joue<br>nous jouons<br>vous jouez<br>ils/elles jouent</td>
+                    <td class="english">to play</td>
+                    <td class="examples">
+                        <div class="example">Les enfants jouent dans le jardin public.</div>
+                        <div class="example">Il joue au tennis tous les samedis matin.</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="category-title">Verbes de mouvement</div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 15%;">Verbe français</th>
+                    <th style="width: 25%;">Conjugaison présent</th>
+                    <th style="width: 15%;">Anglais</th>
+                    <th style="width: 45%;">Exemples</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="french-verb">Venir</td>
+                    <td class="conjugation">je viens<br>tu viens<br>il/elle vient<br>nous venons<br>vous venez<br>ils/elles viennent</td>
+                    <td class="english">to come</td>
+                    <td class="examples">
+                        <div class="example">Il vient de France pour ses études.</div>
+                        <div class="example">Venez-vous à la fête samedi soir ?</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="french-verb">Partir</td>
+                    <td class="conjugation">je pars<br>tu pars<br>il/elle part<br>nous partons<br>vous partez<br>ils/elles partent</td>
+                    <td class="english">to leave</td>
+                    <td class="examples">
+                        <div class="example">Le train part à 8 heures précises.</div>
+                        <div class="example">Nous partons en vacances demain matin.</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="french-verb">Sortir</td>
+                    <td class="conjugation">je sors<br>tu sors<br>il/elle sort<br>nous sortons<br>vous sortez<br>ils/elles sortent</td>
+                    <td class="english">to go out</td>
+                    <td class="examples">
+                        <div class="example">Je sors avec mes amis ce soir.</div>
+                        <div class="example">Elle sort promener son chien chaque matin.</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="french-verb">Monter</td>
+                    <td class="conjugation">je monte<br>tu montes<br>il/elle monte<br>nous montons<br>vous montez<br>ils/elles content</td>
+                    <td class="english">to go up</td>
+                    <td class="examples">
+                        <div class="example">Il monte les escaliers rapidement chaque jour.</div>
+                        <div class="example">Nous montons en montagne tous les étés.</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="category-title">Verbes de possession et action sur objets</div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 15%;">Verbe français</th>
+                    <th style="width: 25%;">Conjugaison présent</th>
+                    <th style="width: 15%;">Anglais</th>
+                    <th style="width: 45%;">Exemples</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="french-verb">Prendre</td>
+                    <td class="conjugation">je prends<br>tu prends<br>il/elle prend<br>nous prenons<br>vous prenez<br>ils/elles prennent</td>
+                    <td class="english">to take</td>
+                    <td class="examples">
+                        <div class="example">Je prends le bus pour aller au travail.</div>
+                        <div class="example">Prenez votre temps pour réfléchir.</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="french-verb">Mettre</td>
+                    <td class="conjugation">je mets<br>tu mets<br>il/elle met<br>nous mettons<br>vous mettez<br>ils/elles mettent</td>
+                    <td class="english">to put</td>
+                    <td class="examples">
+                        <div class="example">Elle met ses clés sur la table d'entrée.</div>
+                        <div class="example">Je mets mon manteau avant de sortir.</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="french-verb">Laisser</td>
+                    <td class="conjugation">je laisse<br>tu laisses<br>il/elle laisse<br>nous laissons<br>vous laissez<br>ils/elles laissent</td>
+                    <td class="english">to leave/let</td>
+                    <td class="examples">
+                        <div class="example">Laissez vos bagages dans l'entrée.</div>
+                        <div class="example">Je laisse la fenêtre ouverte pour aérer.</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="french-verb">Chercher</td>
+                    <td class="conjugation">je cherche<br>tu cherches<br>il/elle cherche<br>nous cherchons<br>vous cherchez<br>ils/elles cherchent</td>
+                    <td class="english">to look for</td>
+                    <td class="examples">
+                        <div class="example">Je cherche mes clés partout dans la maison.</div>
+                        <div class="example">Elle cherche un nouveau travail depuis un mois.</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
