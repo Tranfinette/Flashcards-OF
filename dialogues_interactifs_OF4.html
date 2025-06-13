@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Dialogues interactifs OF4</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .card { border: 1px solid #ccc; border-radius: 10px; margin: 20px 0; padding: 15px; cursor: pointer; background: #f9f9f9; }
+        .en { display: none; margin-top: 10px; color: #333; }
+        h2 { color: #2c3e50; }
+    </style>
+    <script>
+        function toggle(id) {
+            var x = document.getElementById(id);
+            x.style.display = x.style.display === "none" ? "block" : "none";
+        }
+    </script>
+</head>
+<body>
+    <h1>Dialogues interactifs – OF4</h1>
+
+    <div class="card" onclick="toggle('en1')">
+        <h2>Un cahier oublié à la cafétéria</h2>
+        <strong>📘 Dialogue en français :</strong><br>
+        <pre>Julie : Bonjour ! J’ai trouvé ce cahier à la cafétéria ce matin.
+Thomas : Tu sais à qui il est ?
+Julie : Non… Mais il est noir, assez mince, et il y a un autocollant avec le prénom "Nadia" sur la première page.
+Thomas : Hmm… Ce n’est pas le mien. Le mien est plus grand, et la couverture est bleue.
+Julie : Est-ce que ça pourrait être celui de Nadia Bouchard, la nouvelle agente des ressources humaines ?
+Thomas : Peut-être. Elle avait un cahier en main hier pendant la réunion.
+Julie : Je vais le laisser à la réception avec une note : « Cahier noir — peut-être à Nadia ».
+Réceptionniste : Merci Julie. On va vérifier avec elle. Sinon, on le mettra dans les objets perdus.</pre>
+        <div class="en" id="en1">
+            <strong>📗 English translation:</strong><br>
+            <pre>Julie: Hi! I found this notebook at the cafeteria this morning.
+Thomas: Do you know whose it is?
+Julie: No... But it’s black, quite thin, and there’s a sticker with the name "Nadia" on the first page.
+Thomas: Hmm... It’s not mine. Mine is larger and the cover is blue.
+Julie: Could it be Nadia Bouchard’s, the new HR officer?
+Thomas: Maybe. She was holding a notebook during the meeting yesterday.
+Julie: I’ll leave it at reception with a note: "Black notebook — maybe Nadia’s".
+Receptionist: Thanks, Julie. We’ll check with her. Otherwise, we’ll put it in lost and found.</pre>
+        </div>
+    </div>
+    
+    <div class="card" onclick="toggle('en2')">
+        <h2>Confusion dans la salle de réunion</h2>
+        <strong>📘 Dialogue en français :</strong><br>
+        <pre>Bernard : Fatou, tu n’aurais pas vu mon porte-documents ?
+Fatou : Il est comment ?
+Bernard : Il est brun foncé, en cuir, un peu usé sur les coins. Il y a mes initiales en bas à droite.
+Fatou : Hmm… J’ai vu un porte-documents près du projecteur. Mais je croyais que c’était celui de Luc.
+Bernard : Non, le sien est noir, très neuf. Le mien est plus ancien.
+Fatou : Viens, on va voir. Ah, regarde, c’est bien le tien ! Il y a un stylo doré à l’intérieur ?
+Bernard : Oui, c’est le mien. Merci ! J’étais sûr de l’avoir apporté ce matin, mais je l’ai sans doute posé là en installant la présentation.
+Fatou : Heureusement que je ne l’ai pas donné à quelqu’un d’autre !</pre>
+        <div class="en" id="en2">
+            <strong>📗 English translation:</strong><br>
+            <pre>Bernard: Fatou, haven’t you seen my briefcase?
+Fatou: What does it look like?
+Bernard: It’s dark brown, leather, a bit worn on the corners. My initials are at the bottom right.
+Fatou: Hmm... I saw a briefcase near the projector. But I thought it was Luc’s.
+Bernard: No, his is black and very new. Mine is older.
+Fatou: Come, let’s go check. Ah, look, it’s yours! Is there a gold pen inside?
+Bernard: Yes, it’s mine. Thanks! I was sure I brought it this morning, but I must have put it there while setting up the presentation.
+Fatou: Good thing I didn’t give it to someone else!</pre>
+        </div>
+    </div>
+    
+    <div class="card" onclick="toggle('en3')">
+        <h2>À la recherche de la tablette</h2>
+        <strong>📘 Dialogue en français :</strong><br>
+        <pre>Isabelle : Quelqu’un a laissé une tablette sur la table de la salle commune. Vous savez à qui elle est ?
+Karim : Elle est noire, assez fine, avec un étui rouge ?
+Isabelle : Oui, exactement.
+Karim : Ce n’est pas la mienne. La mienne est grise, et j’ai un étui en cuir noir.
+Stéphanie : Ce doit être celle de Mathieu. Il utilise souvent une tablette rouge pour ses notes de réunion.
+Isabelle : Je ne suis pas sûre… Il me semble que la sienne est plus grande. Celle-ci est plutôt petite, avec une coque en plastique.
+Karim : On peut peut-être l’ouvrir et regarder s’il y a une fiche d’identification ?
+Stéphanie : Bonne idée, mais si elle est verrouillée, on devra la remettre au service informatique.
+Isabelle : D’accord. En attendant, je vais noter « Trouvé : tablette noire avec étui rouge » et l’afficher dans le couloir.</pre>
+        <div class="en" id="en3">
+            <strong>📗 English translation:</strong><br>
+            <pre>Isabelle: Someone left a tablet on the common room table. Do you know whose it is?
+Karim: Is it black, rather thin, with a red case?
+Isabelle: Yes, exactly.
+Karim: It’s not mine. Mine is gray, and I have a black leather case.
+Stéphanie: It must be Mathieu’s. He often uses a red tablet for his meeting notes.
+Isabelle: I’m not sure... I think his is bigger. This one is quite small, with a plastic cover.
+Karim: Maybe we can open it and check for an ID note?
+Stéphanie: Good idea, but if it’s locked, we’ll have to give it to IT.
+Isabelle: Alright. Meanwhile, I’ll write “Found: black tablet with red case” and post it in the hallway.</pre>
+        </div>
+    </div>
+    
+<p><em>Cliquez sur chaque dialogue pour afficher la traduction en anglais.</em></p>
+</body>
+</html>
